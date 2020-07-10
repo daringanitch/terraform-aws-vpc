@@ -1,19 +1,19 @@
 ################ VPC #################
-resource "aws_vpc" "main" {
-  cidr_block       = "${var.main_vpc_cidr}"
+resource "aws_vpc" "main2" {
+  cidr_block       = "${var.main2_vpc_cidr}"
   instance_tenancy = "default"
   enable_dns_support = true
   enable_dns_hostnames = true
 
   tags {
-    Name = "main"
+    Name = "main2"
   }
 }
 
  ################# Subnets #############
 resource "aws_subnet" "subnet1" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.1.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.1.0/24"
   availability_zone = "${var.availability_zone1}"
 
 
@@ -22,8 +22,8 @@ resource "aws_subnet" "subnet1" {
     }
 }
 resource "aws_subnet" "subnet2" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.2.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.2.0/24"
   availability_zone = "${var.availability_zone2}"
 
 
@@ -32,8 +32,8 @@ resource "aws_subnet" "subnet2" {
   }
 }
 resource "aws_subnet" "subnet3" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.3.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.3.0/24"
   availability_zone = "${var.availability_zone1}"
 
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "subnet3" {
   }
 }
 resource "aws_subnet" "subnet4" {
-  vpc_id     = "${aws_vpc.main.id}"
+  vpc_id     = "${aws_vpc.main2.id}"
   cidr_block = "10.0.4.0/24"
   availability_zone = "${var.availability_zone2}"
 
@@ -52,8 +52,8 @@ resource "aws_subnet" "subnet4" {
   }
 }
 resource "aws_subnet" "subnet5" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.5.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.5.0/24"
   availability_zone = "${var.availability_zone1}"
 
 
@@ -62,8 +62,8 @@ resource "aws_subnet" "subnet5" {
   }
 }
 resource "aws_subnet" "subnet6" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.6.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.6.0/24"
   availability_zone = "${var.availability_zone2}"
 
 
@@ -72,8 +72,8 @@ resource "aws_subnet" "subnet6" {
   }
 }
 resource "aws_subnet" "subnet7" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.7.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.7.0/24"
   availability_zone = "${var.availability_zone1}"
 
 
@@ -82,8 +82,8 @@ resource "aws_subnet" "subnet7" {
   }
 }
 resource "aws_subnet" "subnet8" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.8.0/24"
+  vpc_id     = "${aws_vpc.main2.id}"
+  cidr_block = "10.202.8.0/24"
   availability_zone = "${var.availability_zone2}"
 
 
@@ -93,8 +93,8 @@ resource "aws_subnet" "subnet8" {
 }
 
 ######## IGW ###############
-resource "aws_internet_gateway" "main-igw" {
-  vpc_id = "${aws_vpc.main.id}"
+resource "aws_internet_gateway" "main2-igw" {
+  vpc_id = "${aws_vpc.main2.id}"
 
   tags {
     Name = "main-igw"
@@ -110,30 +110,30 @@ resource "aws_nat_gateway" "main-natgw" {
   subnet_id     = "${aws_subnet.subnet8.id}"
 
   tags {
-    Name = "main-nat"
+    Name = "main2-nat"
   }
 }
 
 ############# Route Tables ##########
 
-resource "aws_route_table" "main-public-rt" {
-  vpc_id = "${aws_vpc.main.id}"
+resource "aws_route_table" "main2-public-rt" {
+  vpc_id = "${aws_vpc.main2.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.main-igw.id}"
+    gateway_id = "${aws_internet_gateway.main2-igw.id}"
   }
 
   tags {
-    Name = "main-public-rt"
+    Name = "main2-public-rt"
   }
 }
 
-resource "aws_route_table" "main-private-rt" {
-  vpc_id = "${aws_vpc.main.id}"
+resource "aws_route_table" "main2-private-rt" {
+  vpc_id = "${aws_vpc.main2.id}"
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_nat_gateway.main-natgw.id}"
+    gateway_id = "${aws_nat_gateway.main2-natgw.id}"
   }
 
   tags {
